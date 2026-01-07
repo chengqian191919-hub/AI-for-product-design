@@ -5,7 +5,10 @@ export enum WorkflowStep {
   PRODUCT = '产品生图',
   RENDER = '渲染图生成',
   SCENE = '场景图生成',
-  STORYBOARD = '故事板生成'
+  STORYBOARD = '故事板生成',
+  MODELING = '产品建模',
+  ENGINEERING = '工程制图',
+  PRODUCTION = '打样与生产'
 }
 
 export interface ChatMessage {

@@ -62,3 +62,18 @@ export const editAIImage = async (baseImage64: string, prompt: string) => {
   }
   throw new Error("图片优化失败");
 };
+
+export const searchManufacturers = async (productType: string) => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: `请帮我搜索并列举出适合生产 ${productType} 的优质代工厂、3D打印服务商和模具厂。请提供建议的合作流程。`,
+    config: {
+      tools: [{ googleSearch: {} }]
+    }
+  });
+  return {
+    text: response.text,
+    sources: response.candidates?.[0]?.groundingMetadata?.groundingChunks || []
+  };
+};

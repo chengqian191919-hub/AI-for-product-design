@@ -4,6 +4,7 @@ import { WorkflowStep } from './types';
 import InspirationChat from './components/InspirationChat';
 import ImageWorkspace from './components/ImageWorkspace';
 import StoryboardGenerator from './components/StoryboardGenerator';
+import ProductionWorkspace from './components/ProductionWorkspace';
 import { 
   Sparkles, 
   PenTool, 
@@ -13,7 +14,10 @@ import {
   Layout, 
   ChevronRight,
   Menu,
-  X
+  X,
+  BoxSelect,
+  Ruler,
+  Factory
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -24,9 +28,12 @@ const App: React.FC = () => {
     { id: WorkflowStep.INSPIRATION, icon: <Sparkles className="w-5 h-5" />, label: "灵感搜集", desc: "AI 创意激发" },
     { id: WorkflowStep.SKETCH, icon: <PenTool className="w-5 h-5" />, label: "草图生成", desc: "概念草拟" },
     { id: WorkflowStep.PRODUCT, icon: <Box className="w-5 h-5" />, label: "产品生图", desc: "造型与风格" },
+    { id: WorkflowStep.MODELING, icon: <BoxSelect className="w-5 h-5" />, label: "产品建模", desc: "三维构思" },
     { id: WorkflowStep.RENDER, icon: <SunMedium className="w-5 h-5" />, label: "渲染图生成", desc: "材质与细节" },
+    { id: WorkflowStep.ENGINEERING, icon: <Ruler className="w-5 h-5" />, label: "工程制图", desc: "标准制图" },
     { id: WorkflowStep.SCENE, icon: <Camera className="w-5 h-5" />, label: "场景图生成", desc: "环境模拟" },
-    { id: WorkflowStep.STORYBOARD, icon: <Layout className="w-5 h-5" />, label: "故事板生成", desc: "使用流转" },
+    { id: WorkflowStep.STORYBOARD, icon: <Layout className="w-5 h-5" />, label: "故事板生成", desc: "使用方式" },
+    { id: WorkflowStep.PRODUCTION, icon: <Factory className="w-5 h-5" />, label: "打样与生产", desc: "供应链对接" },
   ];
 
   const renderContent = () => {
@@ -51,6 +58,15 @@ const App: React.FC = () => {
             placeholderPrompt="例如：高端手持浓缩咖啡机，哑光黑铝合金材质，木质装饰点缀"
           />
         );
+      case WorkflowStep.MODELING:
+        return (
+          <ImageWorkspace 
+            step={currentStep} 
+            title="AI 三维建模概念" 
+            description="生成产品的多角度视图、正交视图及拓扑概念，为CAD建模做准备。"
+            placeholderPrompt="例如：智能音箱的三个视图（正、侧、俯），展示曲面流向和接口布局"
+          />
+        );
       case WorkflowStep.RENDER:
         return (
           <ImageWorkspace 
@@ -59,6 +75,17 @@ const App: React.FC = () => {
             description="为您的设计应用专业级光影效果与材质精修。"
             placeholderPrompt="例如：产品材质微距特写，柔和的演播室灯光，虚化背景"
           />
+        );
+      case WorkflowStep.ENGINEERING:
+        return (
+          <div className="bg-blue-900/5 rounded-3xl p-1 border border-blue-500/10">
+            <ImageWorkspace 
+              step={currentStep} 
+              title="AI 工程制图" 
+              description="生成符合标准的工程图纸、带标注的蓝图或技术说明图。"
+              placeholderPrompt="例如：产品的工程蓝图样式，包含尺寸标注线，白色线条蓝色背景，侧视图"
+            />
+          </div>
         );
       case WorkflowStep.SCENE:
         return (
@@ -71,6 +98,8 @@ const App: React.FC = () => {
         );
       case WorkflowStep.STORYBOARD:
         return <StoryboardGenerator />;
+      case WorkflowStep.PRODUCTION:
+        return <ProductionWorkspace />;
       default:
         return null;
     }
@@ -91,7 +120,7 @@ const App: React.FC = () => {
           {isSidebarOpen && <span className="font-bold text-xl tracking-tight text-white">DesignFlow AI</span>}
         </div>
 
-        <nav className="flex-1 px-3 py-6 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto custom-scrollbar">
           {steps.map((step) => (
             <button
               key={step.id}
@@ -107,12 +136,12 @@ const App: React.FC = () => {
               </div>
               {isSidebarOpen && (
                 <div className="text-left">
-                  <div className="text-sm font-semibold">{step.label}</div>
-                  <div className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">{step.desc}</div>
+                  <div className="text-xs font-semibold">{step.label}</div>
+                  <div className="text-[9px] text-neutral-500 font-medium uppercase tracking-wider">{step.desc}</div>
                 </div>
               )}
               {!isSidebarOpen && (
-                 <div className="absolute left-full ml-4 px-2 py-1 bg-neutral-800 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-neutral-700">
+                 <div className="absolute left-full ml-4 px-2 py-1 bg-neutral-800 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-neutral-700 z-50">
                     {step.label}
                  </div>
               )}
@@ -140,11 +169,11 @@ const App: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="px-3 py-1 bg-blue-600/10 border border-blue-500/20 rounded-full text-[10px] font-bold text-blue-400 uppercase tracking-widest">
-              AI 驱动设计工作室
+            <div className="hidden sm:block px-3 py-1 bg-blue-600/10 border border-blue-500/20 rounded-full text-[10px] font-bold text-blue-400 uppercase tracking-widest">
+              AI 驱动设计全流程工作室
             </div>
             <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer hover:bg-neutral-700 transition-colors">
-              <span className="text-xs font-bold text-neutral-400">JD</span>
+              <span className="text-xs font-bold text-neutral-400">CQ</span>
             </div>
           </div>
         </header>
