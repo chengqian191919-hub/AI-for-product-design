@@ -1,0 +1,7 @@
+{
+  "name": "DesignFlow AI",
+  "description": "A comprehensive AI-powered product design studio for the entire workflow from inspiration to storyboard.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
